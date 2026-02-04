@@ -1,0 +1,13 @@
+# 排除 node_modules 文件夹
+node_modules/
+
+# 排除日志文件
+*.log
+
+# 排除编译后的打包文件夹（如果有）
+dist/
+build/
+
+# 排除编辑器配置文件（可选，根据你使用的编辑器添加）
+.vscode/
+.idea/
