@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>存档系统 · 欧利蒂丝风格</title>
+  <!-- 下面新加的 -->
+  <link rel="stylesheet" href="./assets/style/achievement.css">
+  <!-- 上面新加的 -->
+  <link rel="stylesheet" href="./assets/style/main.css"/>
+  
+</head>
+<body>
+    <audio id="bgm" src="./assets/audios/audio.mp3" autoplay loop></audio> 
+  <!-- 主界面 -->
+  <div id="screen-main" class="screen active">
+    <h1 class="title">欢迎来到欧利蒂丝庄园！</h1>
+    <div class="menu-col">
+      <button id="btn-new-game" class="btn red">新的游戏</button>
+      <button id="btn-to-load" class="btn red">读取存档</button>
+      <button id="btn-ach" class="btn red">我的成就</button>
+      <button id="btn-profile" class="btn red">角色档案</button>
+      <button id="btn-about" class="btn red">关于我们</button>
+    </div>
+    <!-- 左上角齿轮按钮 -->
+    
+  </div>
+
+  <!-- 存档列表页面 -->
+  <div id="screen-savelist" class="screen">
+    <div class="panel glass">
+      <div class="panel-hd">
+        <h2>存档列表</h2>
+        <div class="acts">
+          <button id="btn-back-main" class="btn ghost">返回主界面</button>
+        </div>
+      </div>
+      <div id="save-list" class="save-list"></div>
+      <div class="panel-ft">
+        <button id="btn-new-save" class="btn red">新建存档</button>
+        <button id="btn-clear-all" class="btn danger">清空全部存档</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 游戏内菜单 -->
+  <div id="ingame-menu" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ingame-menu-title">
+    <div class="menu-card glass">
+      <h3 id="ingame-menu-title">游戏菜单</h3>
+      <p class="desc">这是测试用菜单。接入真实游戏后，点击“保存游戏”即可把当前游戏进度写入存档。</p>
+      <div class="menu-actions">
+        <button id="btn-save-now" class="btn red">保存游戏</button>
+        <button id="btn-open-savelist" class="btn ghost">打开存档列表</button>
+        <button id="btn-close-menu" class="btn ghost">关闭</button>
+      </div>
+    </div>
+  </div>
+  <!-- 下面是新加的 -->
+  <!-- 成就页面 -->
+  <div id="screen-achievement" class="screen">
+    <div class="ach-list">
+      <div class="ach-item" id="ach1">
+        噩梦的开始
+        <div class="ach-desc">达成条件：完成注册</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach2">
+        这里不对！
+        <div class="ach-desc">达成条件：第一次互动</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach3">
+        接近真相
+        <div class="ach-desc">达成条件：进入地下室</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach4">
+        钢琴家
+        <div class="ach-desc">达成条件：弹一次钢琴</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach5">
+        日记推演
+        <div class="ach-desc">达成条件：观看一次剧情</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach6">
+        首战告捷
+        <div class="ach-desc">达成条件：战斗胜利一次</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach7">
+        故事的最后
+        <div class="ach-desc">达成条件：boos战失败</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach8">
+        欧律狄刻
+        <div class="ach-desc">达成条件：boss战胜利</div>
+        <div class="ach-status">未完成</div>
+      </div>
+      <div class="ach-item" id="ach9">
+        color egg
+        <div class="ach-desc">达成条件：发现彩蛋</div>
+        <div class="ach-status">未完成</div>
+      </div>
+    </div>
+        <div class="ach-acts">
+        <button id="btn-back-main-ach" class="btn ghost ach-back">返回主界面</button>
+        </div>
+                        <!-- 成就弹窗 -->
+    
+    
+  </div>
+    <div class="ach-popup hidden">
+  <div class="ach-title">成就标题</div>
+  <div class="ach-desc">成就描述</div>
+    </div>
+  <!-- 上面是新加的 -->
+  <!-- 轻量通知 -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+      <script type="text/javascript" src="./script/managers/AchievementManager.js"></script>
+  <script src="./script/managers/savemanager.js"></script>
+  <script src="./script/main.js"></script>
+\
+</body>
+</html>

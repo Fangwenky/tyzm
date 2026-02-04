@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>版本0.0</title>
+  <link rel="stylesheet" type="text/css" href="./assets/style/style.css">
+  <link rel="stylesheet" type="text/css" href="./assets/style/main.css">
+  <link rel="stylesheet" href="./assets/style/achievement.css">
+  <link rel="stylesheet" href="./assets/style/bag.css">
+
+<style>
+  /* 右侧抽屉面板 */
+  .guide-side {
+    position: fixed; top: 0; right: 0; height: 100vh; width: 320px;
+    background: rgba(20,22,28,0.94); color: #fff; border-left: 1px solid #2a2f3a;
+    box-shadow: -8px 0 24px rgba(0,0,0,0.25); z-index: 10010;
+    transform: translateX(100%); transition: transform .25s ease;
+    display: flex; flex-direction: column;
+  }
+  .guide-side:not(.hidden){ transform: translateX(0); }
+  .guide-head { display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; border-bottom:1px solid #2a2f3a; font-weight:600; }
+  .guide-list{ padding:10px 8px; overflow:auto; flex:1; }
+  .guide-item{ display:flex; gap:10px; align-items:flex-start; padding:10px 8px; border-bottom:1px dashed #333; }
+  .guide-item .g-title{ font-weight:600; }
+  .guide-item .g-desc{ opacity:.8; font-size:12px; margin-top:2px; }
+  .guide-item.done{ opacity:.55; text-decoration: line-through; }
+  .guide-item .g-act { margin-left:auto; }
+  #btn-open-guide.hud-btn{ left:auto; right:16px; top:56px; position:fixed; }
+
+  /* ✅ 新增：让 popup 和 overlay 默认隐藏 */
+  #overlay, #popup {
+    display: none;
+  }
+</style>
+
+</head>
+
+<body>
+   <audio id="bgm" src="./assets/audios/game.mp3" autoplay loop></audio> 
+  <!-- 独立的背包悬浮按钮（在左上角齿轮按钮正下方） -->
+
+  <canvas id="gameCanvas" tabindex="0" aria-label="游戏画布"></canvas>
+
+
+<!-- 半透明遮罩层 -->
+<div id="overlay"></div>
+
+<!-- 悬浮窗 -->
+<div id="popup">
+  <button id="closeBtn">×</button>
+  <iframe src="./minigame/minigame/minigame.html"></iframe>
+</div>
+
+
+<div class="hud-panel">
+    <button id="btn-gear" class="hud-btn" title="打开菜单" aria-label="打开菜单"style="font-size: 36px;">⚙</button>
+    <button id="btn-open-bag" class="hud-btn" aria-label="打开背包" title="背包" style="font-size: 36px;">🧳</button>
+    <button id="btn-open-plot" class="hud-btn hidden" aria-label="打开剧情系统" title="剧情" style="font-size: 36px;">📖</button>
+    <button id="btn-open-money" class="hud-btn" aria-label="充值" title="支持我们" style="font-size: 36px;">💰</button>
+</div>
+</div>
+
+
+<div id="image-overlay" class="overlay hidden">
+  <div class="image-card">
+    <img src="assets/imgs/money.jpg" style="max-width:50%; border-radius:8px;" alt="充值游戏"/>
+    <button id="btn-close-image" class="btn ghost">关闭</button>
+  </div>
+</div>
+
+  <!-- 菜单弹窗 -->
+  <div id="ingame-menu" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ingame-menu-title">
+    <div class="menu-card glass">
+      <h1 id="ingame-menu-title">游戏菜单</h1>
+      <p class="desc">点击“保存游戏”即可把当前游戏进度写入存档。当然，由于我们支持自动存档，所以不存档也没关系喵！</p>
+      <div class="menu-actions">
+        <button id="btn-save-now" class="btn red">保存游戏</button>
+        <button id="btn-back-main" class="btn ghost">返回主界面</button>
+        <button id="btn-close-menu" class="btn ghost">关闭</button>
+      </div>
+    </div>
+  </div>
+  <!-- 背包面板（默认隐藏） -->
+<div id="bag-overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="bag-title">
+  <div class="menu-card glass" style="max-width:680px;">
+    <h1 id="bag-title">背包</h1>
+    <p class="desc">这里显示当前存档内持有的物品。</p>
+
+    <!-- 物品列表 -->
+    <div id="bag-list" class="save-list" style="margin-top:8px;"></div>
+
+    <!-- 操作区（可按需扩展，比如使用/丢弃） -->
+    <div class="menu-actions">
+      <button id="btn-close-bag" class="btn ghost">关闭</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 剧情系统面板（默认隐藏） -->
+<div id="plot-overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="plot-title">
+  <div class="menu-card glass" style="max-height:80vh;overflow-y: auto;">
+    <h1 id="plot-title">剧情系统</h1>
+    <p class="desc">选择章节游玩或回放。通关一章后解锁下一章。</p>
+
+    <!-- 章节列表 -->
+    <div id="plot-list" class="save-list" style="margin-top:8px;"></div>
+
+    <div class="menu-actions">
+      <button id="btn-close-plot" class="btn ghost">关闭</button>
+    </div>
+  </div>
+</div>
+<!-- 右侧的新手引导按钮 -->
+<button id="btn-open-guide" class="hud-btn" aria-label="打开新手引导" title="引导">❔</button>
+
+<!-- 新手引导侧栏（默认隐藏） -->
+<div id="guide-panel" class="guide-side hidden" role="complementary" aria-label="新手引导">
+  <div class="guide-head">
+    <h1>新手引导</h1>
+    <button id="btn-close-guide" class="btn ghost" aria-label="关闭引导">✕</button>
+  </div>
+  <div id="guide-list" class="guide-list"></div>
+</div>
+
+
+
+  <!-- 成就弹窗 -->
+<div class="ach-popup hidden">
+  <div class="ach-title">成就标题</div>
+  <div class="ach-desc">成就描述</div>
+</div>
+
+  <!-- 你的其它脚本（保持不变；如它们依赖 canvas，请也加 defer） -->
+   <script defer src="./script/managers/AchievementManager.js"></script>
+  <script defer src="./script/managers/savemanager.js"></script>
+  <script defer src="./script/menu.js"></script>
+  <script defer src="./script/managers/InventoryManager.js"></script>
+  <script defer src="./script/managers/PlotManager.js"></script>
+  <script defer src="./script/managers/GuideManager.js"></script>
+
+  <!-- 先工具/交互，再主逻辑 -->
+   <script defer src="./script/game.js"></script>
+  <script defer src="./script/interaction.js"></script>
+  <script defer src="./script/player.js"></script>
+  
+</body>
+</html>

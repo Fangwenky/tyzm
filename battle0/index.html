@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>卡牌游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="bgm" src="../assets/audios/battle.mp3" autoplay loop></audio> 
+    <!-- 求生者选择界面 -->
+    <div id="survivor-selection-screen">
+        <header class="survivor-header">
+            <h1>选择你的求生者</h1>
+            <div class="survivor-info">
+                <span id="survivor-selection-info">选择一个求生者开始你的冒险</span>
+                <button id="confirm-survivor-btn" disabled>确认选择</button>
+            </div>
+        </header>
+        <div id="survivor-grid-container">
+            <!-- 求生者卡片将由 TypeScript 动态生成并插入到这里 -->
+        </div>
+    </div>
+
+    <!-- 选牌界面 -->
+    <div id="deck-builder-screen" class="hidden">
+        <header>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">求生者选择</span>
+                <span class="breadcrumb-separator">→</span>
+                <span class="breadcrumb-item current">构建牌组</span>
+                <span class="breadcrumb-separator">→</span>
+                <span class="breadcrumb-item">开始战斗</span>
+            </div>
+            <h1>构建你的牌组</h1>
+            <div class="deck-info">
+                <span id="deck-count-info">已选卡牌: 0 / 7</span>
+                <button id="start-battle-btn">开始战斗</button>
+            </div>
+        </header>
+        <div id="card-filter-container">
+            <!-- 筛选按钮将由 TypeScript 动态生成 -->
+        </div>
+        <div id="card-list-container">
+            <!-- 卡牌将由 TypeScript 动态生成并插入到这里 -->
+        </div>
+    </div>
+
+    <!-- 战斗界面 -->
+    <div id="battle-screen" class="hidden">
+        <div class="battle-main-container">
+            <!-- 敌人区域 -->
+            <div id="opponent-area-container" class="character-area opponent-area">
+                <div class="floating-text-container"></div>
+                <div class="stats">
+                    <span id="enemy-name" class="name">哥布林</span>
+                    <div class="health-bar">
+                        <div id="enemy-hp-fill" class="fill"></div>
+                        <span id="enemy-hp-text" class="text">80 / 80</span>
+                    </div>
+                    <div id="enemy-shield" class="shield-display"></div>
+                </div>
+                <div id="enemy-card-area" class="enemy-card-container"></div>
+            </div>
+            
+            <!-- 出牌区域 -->
+            <div id="drop-zone" class="drop-zone">
+                <p>将卡牌拖拽至此区域来出牌</p>
+            </div>
+
+            <!-- 玩家手牌/随从区 -->
+            <div id="player-interactive-area" class="player-interactive-area">
+                <div id="follower-area" class="follower-container"></div>
+                <div id="player-hand" class="hand-container"></div>
+            </div>
+        </div>
+
+        <!-- 玩家信息显示 (HUD) -->
+        <div class="player-hud">
+            <div id="player-area-container-hud" class="character-area">
+                <div class="floating-text-container"></div>
+                <div class="stats">
+                    <span id="player-name" class="name">求生者</span>
+                    <div class="health-bar">
+                        <div id="player-hp-fill" class="fill"></div>
+                        <span id="player-hp-text" class="text">100 / 100</span>
+                    </div>
+                    <div id="player-shield" class="shield-display"></div>
+                    <div id="player-ap" class="ap-display">行动点: 3</div>
+                    <div id="survivor-skill-container" class="survivor-skill-container"></div>
+                </div>
+                <!-- 装备栏区域 -->
+                <div id="equipment-area" class="equipment-area">
+                    <div class="equipment-header">装备</div>
+                    <div id="equipment-list" class="equipment-list"></div>
+                </div>
+            </div>
+            <button id="end-turn-btn">结束回合</button>
+        </div>
+        
+        <!-- Tooltip 容器 -->
+        <div id="tooltip-container" class="tooltip-container hidden">
+            <div id="tooltip-content" class="tooltip-content">
+                <div class="tooltip-header">
+                    <h3 id="tooltip-title"></h3>
+                    <span id="tooltip-cost" class="tooltip-cost"></span>
+                </div>
+                <div class="tooltip-separator"></div>
+                <div id="tooltip-description" class="tooltip-description"></div>
+                <div id="tooltip-effects" class="tooltip-effects"></div>
+            </div>
+        </div>
+        
+        <!-- 战斗结束弹窗 -->
+        <div id="game-over-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2 id="game-over-text"></h2>
+                <!-- 新增一个容器用于排列按钮 -->
+                <div class="modal-actions">
+                    <button id="restart-btn" class="modal-button">重新开始</button>
+                    <a href="../game.html" class="modal-button">返回主界面</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./dist/main.js" type="module"></script>
+</body>
+</html>

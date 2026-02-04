@@ -1,0 +1,27 @@
+.hud-panel .hud-btn,
+.hud-panel .gear {
+  width: 64px;      /* 固定大小，圆形更好看 */
+  height: 64px;
+  font-size: 36px;  /* emoji / 图标大小 */
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4); /* 半透明背景 */
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hud-panel .hud-btn:hover,
+.hud-panel .gear:hover {
+  background: rgba(255,255,255,0.2);
+}
+.hud-panel {
+  position: fixed;
+  top: 60px;   /* 调整位置，避免和齿轮重叠 */
+  left: 20px;  /* 靠左 */
+  display: flex;
+  flex-direction: column;  /* 垂直排列 */
+  gap: 12px;   /* 每个按钮之间的间距 */
+  z-index: 9999;
+}

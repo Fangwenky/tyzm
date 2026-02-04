@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>piano!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🎵 按下键盘上的 1 2 3 4 5 6 7 来弹奏</h1>
+  <h2>🎹 参考乐谱</h2>
+  <h2> 1 1 5 5 6 6 5<br>4 4 3 3 2 2 1<br>5 5 4 4 3 3 2</h2>
+  <h2>快来弹弹看这是哪首乐曲吧！</h2>
+  <h4>（友情提示：请不要连续按键哦~）</h4>
+  <div class="piano">
+    <div data-key="49" class="key">1</div>
+    <div data-key="50" class="key">2</div>
+    <div data-key="51" class="key">3</div>
+    <div data-key="52" class="key">4</div>
+    <div data-key="53" class="key">5</div>
+    <div data-key="54" class="key">6</div>
+    <div data-key="55" class="key">7</div>
+  </div>
+  <button style="margin-top: 20px; font-family:'SimSun', 'NSimSun', 'PMingLiU', serif;" onclick="window.location.href='../game.html?from/piano'">返回游戏</button>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="audio.js"></script>
+</body>
+</html>

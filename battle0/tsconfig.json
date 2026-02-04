@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* 基础编译选项 */
+    // "target": "es6", // 将代码编译成哪个版本的 JavaScript。ES6 是一个非常安全且兼容性好的选择，适用于所有现代浏览器。
+     "module": "es6", // 指定生成代码的模块系统。ES6 模块是现代浏览器的标准。
+    "lib": ["dom", "es2017"], // 告诉编译器你的代码将运行在什么环境中。'dom' 包含了所有浏览器环境的API（如 window, document），'es6' 包含了ES6的特性（如 Map, Set）。
+
+    /* 项目结构 (这是您需要的核心配置) */
+    "rootDir": "./src", // 指定存放 TypeScript 源码的根目录。编译器会从这里开始查找 .ts 文件。
+    "outDir": "./dist", // 指定编译后生成的 .js 文件存放的目录。保持源码和编译产物分离，让项目更整洁。
+
+    /* 调试支持 */
+    "sourceMap": true, // 生成 .map 文件，它能让你在浏览器的开发者工具中直接调试 TypeScript 源码，而不是编译后的 JavaScript。对于Debug至关重要！
+
+    /* 严格性检查 (强烈建议全部开启，能帮你避免大量潜在错误) */
+    "strict": true, // 启用所有的严格类型检查选项，这是 TypeScript 的精髓。
+    // "noUnusedLocals": true, // (推荐开启) 报告未被使用的局部变量。
+    // "noUnusedParameters": true, // (推荐开启) 报告未被使用的函数参数。
+    // "noImplicitReturns": true, // (推荐开启) 确保函数所有代码路径都有返回值。
+
+    /* 模块解析选项 */
+    "esModuleInterop": true, // 提升 CommonJS 模块和 ES 模块之间的兼容性，当你使用一些老的npm包时会很有用。
+
+    /* 高级选项 */
+    "forceConsistentCasingInFileNames": true, // 强制文件名的大小写必须一致。
+    "skipLibCheck": true, // 跳过对所有声明文件 (.d.ts) 的类型检查，可以显著加快编译速度。
+  },
+  // "include": ["src/**/*"] // 明确告诉编译器需要编译哪些文件。这里表示编译 src 目录下的所有文件。
+}

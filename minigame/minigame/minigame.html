@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>大家一起来修机！！</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game">
+    <div class="hud">
+      <div class="row">
+        <span class="badge"><i class="dot"></i><b>修机修机</b></span>
+        <span class="badge">难度：<b id="hud-diff">普通</b></span>
+        <span class="badge">速度：<b id="hud-speed">--</b>°/s</span>
+        <span class="badge">窗口：<b id="hud-window">--</b>°</span>
+        <span class="badge">成功：<b id="hud-streak">0 连</b></span>
+        <span class="badge">失败：<b id="hud-fail">0</b></span>
+      </div>
+      <div class="row">
+        <button class="btn" id="btn-start">开始 / 重新开始</button>
+        <button class="btn" id="btn-pause">暂停</button>
+        <button class="btn" id="btn-easy">简单</button>
+        <button class="btn" id="btn-normal">普通</button>
+        <button class="btn" id="btn-hard">困难</button>
+        <label class="badge"><input id="toggle-sfx" type="checkbox" checked style="accent-color:#7c9cf5;"> 音效</label>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <!-- 转盘 -->
+      <div class="dial-wrap" id="dialWrap">
+        <div class="float-msg" id="floatMsg">完美校准 +20%</div>
+        <svg viewBox="0 0 200 200" aria-label="skill check dial">
+          <defs>
+            <linearGradient id="gradRing" x1="0" x2="1">
+              <stop offset="0%" stop-color="#273163"/>
+              <stop offset="100%" stop-color="#1a224f"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="88" fill="#0a0f2b" stroke="url(#gradRing)" stroke-width="12"/>
+          <g id="windowGroup"></g>
+          <circle cx="100" cy="100" r="4" fill="#a1b5ff"/>
+          <g id="ticks"></g>
+          <g id="needle" class="needle">
+            <line x1="100" y1="100" x2="100" y2="20" stroke="#cbe0ff" stroke-width="3" stroke-linecap="round"/>
+            <polygon points="95,24 105,24 100,10" fill="#9cc2ff"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- 右侧面板 -->
+      <div class="panel">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <b>修机进度</b>
+            <small id="progressText">0%</small>
+          </div>
+          <div class="bar"><i id="progressBar"></i></div>
+        </div>
+
+        <div class="control">
+          <span>按 <span class="kbd">Space</span>在指针进入高亮弧段时进行校准。</span>
+          <button class="btn mobile-tap" id="btn-hit">击打 (Space)</button>
+        </div>
+
+        <div class="row" style="gap:14px; align-items:flex-start;">
+          <div class="badge">剩余修机次数：<b id="hud-left">—</b></div>
+          <div class="badge">完美率：<b id="hud-perfect">0%</b></div>
+          <div class="badge">回退保护：<b id="hud-protect">开启</b></div>
+        </div>
+
+        <div class="log" id="log"></div>
+        <div style="opacity:.8; font-size:14px;">ⓘ 次数耗尽且进度&lt;100%将判定<strong>修机失败</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 简单占位音效（静音wav，避免报错；需要可自行替换） -->
+  <audio id="sfx-good" preload="auto"><source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav" /></audio>
+  <audio id="sfx-bad" preload="auto"><source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav" /></audio>
+
+  <script src="game.js"></script>
+</body>
+</html>

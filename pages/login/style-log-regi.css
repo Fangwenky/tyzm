@@ -1,0 +1,55 @@
+
+body {
+    background-image: url(./images/背景.jpg);
+    background-size: cover;
+    font-family: 'SimSun', 'NSimSun', 'PMingLiU', serif;  /* 设置字体 */
+    background-color: #421d1d;       /* 背景淡蓝色 */
+    text-align: center;              /* 内容居中 */
+    margin-top: 200px;               /* 往下移一点 */
+}
+
+h1{
+    color: rgb(171, 24, 24);
+    font-size: 70px;
+}
+div {
+    background-color: rgb(99, 9, 9);         /* 深红色背景 */
+    width: 300px;                    /* 宽度固定 */
+    margin: auto;                    /* 水平居中 */
+    padding: 20px;                   /* 内边距 */
+    border-radius: 10px;             /* 圆角边框 */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* 阴影 */
+}
+
+p {
+    color: white;                    /* 白色文字 */
+    font-size: 16px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+input {
+    display: block;                  /* 每个输入框单独一行 */
+    width: 90%;                      /* 占容器宽度 */
+    padding: 8px;                    /* 内边距 */
+    margin: 10px auto;               /* 上下外边距 */
+    border: 1px solid #ccc;          /* 边框 */
+    border-radius: 5px;              /* 圆角 */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+.green-button {
+    background-color: #8a0202c7;       /* 绿色背景 */
+    color: white;                    /* 白色文字 */
+    padding: 10px 20px;
+    border: none;                    /* 去掉边框 */
+    border-radius: 5px;
+}
+
+.green-button:hover {
+    transform: scale(0.8);
+    background-color: #3a0000;       /* 悬停变深 */
+}

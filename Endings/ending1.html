@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>结局系统</title>
+    <link rel="stylesheet" href="../assets/style/achievement.css">
+    <style>
+        * {
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            font-family: "微软雅黑", sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #language-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            background: rgba(0,0,0,0.5);
+            padding: 5px;
+            border-radius: 5px;
+            display: flex;
+        }
+        #language-switcher button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 0 3px;
+            border-radius: 3px;
+            cursor: pointer;
+            min-width: 70px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        #skip-btn {
+            position: fixed;
+            top: 60px;
+            right: 18px;
+            z-index: 100;
+            background: #444;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            min-width: 65px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        #skip-btn:hover {
+            background: #555;
+        }
+        #dialogue-box {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 30px;
+            font-size: 20px;
+            line-height: 1.5;
+            width: 80%;
+            max-width: 900px;
+            height: 350px;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #character-name {
+            font-weight: bold;
+            font-size: 26px;
+            margin-bottom: 80px;
+            margin-top: -60px;
+            color: #a64032;
+            text-align: center;
+        }
+        #dialogue-text {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 800px;
+            margin-top: -15px;
+
+        }
+        #press-space-hint {
+            font-size: 16px;
+            color: #ccc;
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0.7;
+            user-select: none;
+        }
+        #resource-container {
+            display: none;
+        }
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+      <audio id="bgm" src="../assets/audios/win.mp3" autoplay loop></audio>
+    <div id="loading-overlay">加载中...</div>
+  
+
+    <div id="language-switcher">
+        <button id="btn-zh">中文</button>
+        <button id="btn-en">English</button>
+    </div>
+    <button id="skip-btn">跳过剧情</button>
+
+    <div id="dialogue-box">
+        <div id="character-name"></div>
+        <div id="dialogue-text"></div>
+        <div id="press-space-hint">按空格或回车继续/press space or enter to continue</div>
+    </div>
+    
+    <div id="resource-container"></div>
+    <!-- 成就弹窗 -->
+    <div class="ach-popup hidden">
+      <div class="ach-title">成就标题</div>
+      <div class="ach-desc">成就描述</div>
+    </div>
+ <!-- 先加载并实例化 AchievementManager -->
+<script src="../../script/managers/AchievementManager.js"></script>
+<script>
+  window.achievementManager = window.achievementManager || new AchievementManager();
+
+  // 一进入页面就判定成就8
+  document.addEventListener('DOMContentLoaded', () => {
+    try {
+      // 1) 正常打勾（首次完成会自动弹窗）
+      window.achievementManager.checkAchievements({ ach8: true });
+
+      // 2) 如果你希望“不管之前是否完成，都弹一次窗”，再手动弹一次：
+      const ach = window.achievementManager.achievements.find(a => a.id === 'ach8');
+      if (ach) window.achievementManager.showPopup(ach.name, ach.desc);
+    } catch (e) { console.warn('激活成就8失败：', e); }
+  });
+</script>
+
+<script>
+    // 模拟 ending.js 的内容
+    window.endingConfig = {
+        getEndingConfig: function() {
+            return {
+                meta: {
+                    title: "结局",
+                    author: "六个基米哈一天"
+                },
+                assets: {
+                    background: "../backgrounds/ending1.jpg",
+                    bgmusic: "../audios/win.mp3"
+                },
+                uiText: {
+                    zh: { languageBtn: "中文", endText: "【结局结束】" },
+                    en: { languageBtn: "English", endText: "[Ending Complete]" }
+                },
+                dialogues: {
+                    zh: [
+                        { name: "结局——如果故事重写", text: "我知道这一天总会到来" },
+                        { name: "结局——如果故事重写", text: "我终将面对他" },
+                        { name: "结局——如果故事重写", text: "他是我的朋友也是我的敌人" },
+                        { name: "结局——如果故事重写", text: "他让我成功让我获利" },
+                        { name: "结局——如果故事重写", text: "也让我越来越远离曾经的自己" },
+                        { name: "结局——如果故事重写", text: "能写出最精妙的推理小说的头脑同样也能最精妙的利用罪恶" },
+                        { name: "结局——如果故事重写", text: "能发明出最完美的药剂的天才同样也能完美的摆弄人心" },
+                        { name: "结局——如果故事重写", text: "肮脏的社会充斥着罪恶和压迫" },
+                        { name: "结局——如果故事重写", text: "道德的沦丧压榨着苦命者的善意" },
+                        { name: "结局——如果故事重写", text: "我的家庭破碎又何尝不是因为那些富人间扭曲的竞争与残害" },
+                        { name: "结局——如果故事重写", text: "我的不择手段又何尝不是为了生存的趋利避害" },
+                        { name: "结局——如果故事重写", text: "然而当我见到她的时候我还是动摇了" },
+                        { name: "结局——如果故事重写", text: "我还是放不下她" },
+                        { name: "结局——如果故事重写", text: "放不下我多年的执念没能重聚的破碎的家庭" },
+                        { name: "结局——如果故事重写", text: "哪怕我趋利避害的人格告诉我应当抹杀掉眼前的这个威胁我却不忍心下手" },
+                        { name: "结局——如果故事重写", text: "那是我唯一快乐的人生时光里的陪伴" },
+                        { name: "结局——如果故事重写", text: "是我虽无血缘相系却又至亲至爱的妹妹" },
+                        { name: "结局——如果故事重写", text: "是我破碎命运中唯一牵挂的挚爱之人" },
+                        { name: "结局——如果故事重写", text: "她唤醒了那个沉沦的小说家逃避的、无辜的、祈求解脱的灵魂" },
+                        { name: "结局——如果故事重写", text: "唤醒了我那看似可笑的正义感" },
+                        { name: "结局——如果故事重写", text: "我挣扎着控制着这具躯体" },
+                        { name: "结局——如果故事重写", text: "控制着我近乎疯狂的意志" },
+                        { name: "结局——如果故事重写", text: "我不能伤害他无论如何" },
+                        { name: "结局——如果故事重写", text: "我站在了我和她之间" },
+                        { name: "结局——如果故事重写", text: "我要不惜一切的保护她" },
+                        { name: "结局——如果故事重写", text: "哪怕我的对手是我自己" },
+                        { name: "结局——如果故事重写", text: "两个人格在我的头脑中挣扎" },
+                        { name: "结局——如果故事重写", text: "我的身体试图抹杀自己" },
+                        { name: "结局——如果故事重写", text: "我拼尽全力打开了不归林管道的阀门" },
+                        { name: "结局——如果故事重写", text: "七弦琴和摩涅莫绪涅冲进我的身体" },
+                        { name: "结局——如果故事重写", text: "管道过压爆炸让大火更快蔓延" },
+                        { name: "结局——如果故事重写", text: "爱丽丝，不要回头……" },
+                        { name: "结局——如果故事重写", text: "过量的药品让我陷入了一年的昏迷" },
+                        { name: "结局——如果故事重写", text: "也让我失去了所有的记忆" },
+                        { name: "结局——如果故事重写", text: "十年之后的今天" },
+                        { name: "结局——如果故事重写", text: "又到底是谁让我来到了这个庄园" },
+                        { name: "结局——如果故事重写", text: "让我想起曾经的种种" },
+                        { name: "结局——如果故事重写", text: "如果不回头就能逃离那场灾难…" },
+                        { name: "结局——如果故事重写", text: "爱丽丝" },
+                        { name: "结局——如果故事重写", text: "你现在在哪……" }
+                    ],
+                    en: [
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I knew this day would come eventually—" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I would eventually have to face him." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "He is both my friend and my enemy." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "He led me to success and profit," },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "yet also made me drift further and further from the person I once was." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "A mind that can write the most brilliant mystery novels can also make the most exquisite use of evil;" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "a genius who can invent the most perfect drug can also manipulate people's hearts flawlessly." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "This filthy society is filled with sin and oppression;" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "the decay of morality crushes the kindness of the unfortunate." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Wasn't the destruction of my family also caused by the distorted competition and harm among the wealthy?" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Wasn't my unscrupulousness also a choice to seek profit and avoid harm for survival?" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Yet when I saw her, I still hesitated." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I still couldn't let her go—" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "couldn't let go of my long-standing obsession, of the broken family that never reunited." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Even though my survival-driven personality told me I should eliminate the threat before me, I couldn't bring myself to do it." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "She was the companion of the only happy days in my life;" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "she was my dearest younger sister, even without blood ties;" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "she was the only beloved person I cared about in my broken fate." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "She awakened the lost novelist's soul—the one that evaded reality, was innocent, and longed for liberation." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "She awakened my seemingly ridiculous sense of justice." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I struggled to control this body," },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "to control my almost insane will." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I couldn't hurt her, no matter what." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I stood between myself and her." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "I would protect her at all costs—" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "even if my opponent was myself." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Two personalities struggled in my mind." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "My body tried to destroy itself." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "With all my strength, I opened the valve of the pipeline in the Forest of No Return." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Lyre and Mnemosyne rushed into my body." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "The pipeline exploded due to overpressure, spreading the fire faster." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Alice, don't look back…" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "The excessive dose of drugs put me in a coma for a year," },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "and made me lose all my memories." },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Ten years later, today—" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "who exactly brought me back to this manor?" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Who made me recall all the things from the past?" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "If not looking back could have let me escape that disaster…" },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "Alice," },
+                        { name: "The ending——If the Story Could Be Rewritten", text: "where are you now…" }
+                    ]
+                }
+            };
+        }
+    };
+</script>
+    
+    <script>
+        // 显示成就8
+        if (window.achievementManager) {
+            window.achievementManager.checkAchievements({ ach8: true });
+        }
+
+        class DataManager {
+            constructor() {
+                this.resourceContainer = document.getElementById('resource-container');
+                if (!this.resourceContainer) {
+                    this.resourceContainer = document.createElement('div');
+                    this.resourceContainer.id = 'resource-container';
+                    this.resourceContainer.style.display = 'none';
+                    document.body.appendChild(this.resourceContainer);
+                }
+            }
+
+            async loadImg(src) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = () => reject(new Error(`图片加载失败: ${src}`));
+                    img.src = src;
+                    this.resourceContainer.appendChild(img);
+                });
+            }
+
+            async loadAudio(src) {
+                return new Promise((resolve, reject) => {
+                    const audio = new Audio();
+                    audio.oncanplaythrough = () => resolve(audio);
+                    audio.onerror = () => reject(new Error(`音频加载失败: ${src}`));
+                    audio.src = src;
+                    this.resourceContainer.appendChild(audio);
+                });
+            }
+
+            async loadScript(src) {
+                return new Promise((resolve, reject) => {
+                    // 直接使用已定义的配置
+                    if (window.endingConfig?.getEndingConfig) {
+                        resolve(window.endingConfig.getEndingConfig());
+                    } else {
+                        reject(new Error(`未找到结局配置`));
+                    }
+                });
+            }
+        }
+
+        class EndingEngine {
+            returnToMain() {
+                try {
+                    const chId = sessionStorage.getItem('currentChapterId');
+                    if (chId) {
+                        sessionStorage.setItem('endingComplete', JSON.stringify({
+                            chId,
+                            unlockNext: true,
+                            t: Date.now()
+                        }));
+                    }
+                } catch (e) {
+                    console.warn('记录结局完成失败（可忽略）：', e);
+                }
+                window.location.href = '../game.html?from=ending';
+            }
+
+            constructor() {
+                this.currentIndex = 0;
+                this.isTyping = false;
+                this.typeTimeout = null;
+                this.typeToken = 0;
+                this.currentLang = 'zh';
+                this.currentEnding = null;
+                this.dataManager = new DataManager();
+                this.loadingOverlay = document.getElementById('loading-overlay');
+
+                this.dom = {
+                    bg: document.body.style,
+                    bgm: document.getElementById("bgm"),
+                    name: document.getElementById("character-name"),
+                    text: document.getElementById("dialogue-text"),
+                    btnZh: document.getElementById("btn-zh"),
+                    btnEn: document.getElementById("btn-en"),
+                    skipBtn: document.getElementById("skip-btn") 
+                };
+
+                // 返回主界面按钮
+                this.dom.backBtn = document.createElement('button');
+                this.dom.backBtn.textContent = '返回主界面';
+                Object.assign(this.dom.backBtn.style, {
+                    position: 'fixed',
+                    left: '50%',
+                    bottom: '32px',
+                    transform: 'translateX(-50%)',
+                    padding: '10px 18px',
+                    border: 'none',
+                    borderRadius: '12px',
+                    fontSize: '16px',
+                    cursor: 'pointer',
+                    boxShadow: '0 6px 16px rgba(0,0,0,0.25)',
+                    zIndex: '9999',
+                    display: 'none',
+                    background: 'rgba(255,255,255,0.9)'
+                });
+                document.body.appendChild(this.dom.backBtn);
+                this.dom.backBtn.addEventListener('click', () => this.returnToMain());
+
+                this.initEvents();
+                this.loadEnding().catch(err => {
+                    console.error('结局引擎初始化失败:', err);
+                    this.hideLoading();
+                });
+            }
+
+            hideLoading() {
+                if (this.loadingOverlay) {
+                    this.loadingOverlay.style.display = 'none';
+                }
+            }
+
+            resetTyping(clearText = true) {
+                if (this.typeTimeout) {
+                    clearTimeout(this.typeTimeout);
+                    this.typeTimeout = null;
+                }
+                this.isTyping = false;
+                this.typeToken++;
+                if (clearText) this.dom.text.textContent = "";
+            }
+
+            getAssetPath(relativePath) {
+                // 确保路径正确拼接
+                return `assets/${relativePath}`;
+            }
+
+            async loadEnding() {
+                try {
+                    // 直接使用已定义的配置，而不是加载外部脚本
+                    this.currentEnding = await this.dataManager.loadScript();
+                    await this.initEnding();
+                } catch (error) {
+                    console.error('加载结局失败:', error);
+                    throw error;
+                }
+            }
+
+            async initEnding() {
+                // 触发成就8
+                if (window.achievementManager) {
+                    window.achievementManager.checkAchievements({ ach8: true });
+                }
+                if (!this.currentEnding || !this.currentEnding.assets) {
+                    throw new Error('结局配置不完整');
+                }
+
+                const { assets } = this.currentEnding;
+                
+                try {
+                    // 加载背景图片
+                    const bgPath = this.getAssetPath(assets.background);
+                    console.log('Loading background image from:', bgPath);
+                    
+                    const bgImg = await this.dataManager.loadImg(bgPath);
+                    // 直接设置背景图片URL
+                    document.body.style.backgroundImage = `url('${bgImg.src}')`;
+                    
+                    try {
+                        const bgmPath = this.getAssetPath(assets.bgmusic);
+                        const bgmAudio = await this.dataManager.loadAudio(bgmPath);
+                        this.dom.bgm.src = bgmAudio.src;
+                        this.ensureBGMPlaying();
+                    } catch (e) {
+                        console.warn('BGM 加载失败，跳过音频但继续剧情：', e);
+                    }
+                    
+                    this.dom.btnZh.textContent = this.currentEnding.uiText.zh.languageBtn;
+                    this.dom.btnEn.textContent = this.currentEnding.uiText.en.languageBtn;
+                    
+                    this.hideLoading();
+                    this.startEnding();
+                } catch (err) {
+                    console.error('结局初始化失败:', err);
+                    // 设置一个备用背景
+                   // document.body.style.backgroundImage = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+                    this.hideLoading();
+                    throw err;
+                }
+            }
+
+            ensureBGMPlaying() {
+                const a = this.dom.bgm;
+                if (!a) return;
+                a.preload = 'auto';
+                a.loop = true;
+
+                const tryPlay = () => a.play().catch(() => {});
+
+                tryPlay();
+
+                if (a.paused) {
+                    const onFirstInteract = () => {
+                        tryPlay();
+                        window.removeEventListener('pointerdown', onFirstInteract);
+                        window.removeEventListener('keydown', onFirstInteract);
+                    };
+                    window.addEventListener('pointerdown', onFirstInteract, { once: true });
+                    window.addEventListener('keydown', onFirstInteract, { once: true });
+                }
+            }
+
+            showCurrentDialogue() {
+                this.resetTyping(true);
+                if (!this.currentEnding || !this.currentEnding.dialogues) {
+                    return;
+                }
+
+                const dialogues = this.currentEnding.dialogues[this.currentLang] || [];
+                if (this.currentIndex >= dialogues.length) {
+                    this.dom.text.textContent = this.currentEnding.uiText[this.currentLang].endText;
+                    if (this.dom.backBtn) this.dom.backBtn.style.display = 'block';
+                    return;
+                }
+
+                const dialogue = dialogues[this.currentIndex];
+                this.dom.name.textContent = dialogue.name || "???";
+                this.typeText(dialogue.text || "");
+            }
+
+            typeText(text) {
+                this.resetTyping(true);
+                this.isTyping = true;
+                const token = this.typeToken;
+                let i = 0;
+                const typeChar = () => {
+                    if (token !== this.typeToken) return;
+                    if (i < text.length) {
+                        this.dom.text.textContent += text.charAt(i++);
+                        this.typeTimeout = setTimeout(typeChar, 40);
+                    } else {
+                        this.isTyping = false;
+                    }
+                };
+                typeChar();
+            }
+
+            next() {
+                if (!this.currentEnding || !this.currentEnding.dialogues) return;
+
+                const dialogues = this.currentEnding.dialogues[this.currentLang] || [];
+                if (this.currentIndex >= dialogues.length) return;
+
+                if (this.isTyping) {
+                    clearTimeout(this.typeTimeout);
+                    this.dom.text.textContent = dialogues[this.currentIndex].text || "";
+                    this.isTyping = false;
+                } else {
+                    this.currentIndex++;
+                    this.showCurrentDialogue();
+                }
+            }
+
+            loadLanguage(lang) {
+                if (lang === this.currentLang) return;
+                this.resetTyping(true);
+                this.currentLang = lang;
+                this.currentIndex = 0;
+                this.showCurrentDialogue();
+            }
+
+            initEvents() {
+                document.addEventListener("keydown", (e) => {
+                    if (["Space", "Enter"].includes(e.code)) {
+                        e.preventDefault();
+                        this.next();
+                    }
+                });
+
+                this.dom.btnZh?.addEventListener("click", () => this.loadLanguage('zh'));
+                this.dom.btnEn?.addEventListener("click", () => this.loadLanguage('en'));
+                this.dom.skipBtn?.addEventListener("click", () => this.skipToEnd());
+                document.getElementById("dialogue-box")?.addEventListener("click", () => this.next());
+            }
+
+            startEnding() {
+                if (this.dom.backBtn) this.dom.backBtn.style.display = 'none';
+                this.currentIndex = 0;
+                this.showCurrentDialogue();
+            }
+
+            skipToEnd() {
+                if (!this.currentEnding || !this.currentEnding.dialogues) return;
+                
+                const dialogues = this.currentEnding.dialogues[this.currentLang] || [];
+                this.currentIndex = dialogues.length;
+                
+                this.resetTyping(true);
+                this.dom.name.textContent = "";
+                this.dom.text.textContent = this.currentEnding.uiText[this.currentLang].endText;
+                
+                if (this.dom.backBtn) this.dom.backBtn.style.display = 'block';
+            }
+        }
+
+        // 初始化引擎
+        const engine = new EndingEngine();
+    </script>
+    <script src="../script/managers/AchievementManager.js"></script>
+</body>
+</html>

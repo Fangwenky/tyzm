@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>章节配置测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .chapter-info { border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .test-button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .test-button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>战斗系统章节配置测试</h1>
+    
+    <div>
+        <h2>测试按钮</h2>
+        <button class="test-button" onclick="testChapter(1)">测试第1章</button>
+        <button class="test-button" onclick="testChapter(2)">测试第2章</button>
+        <button class="test-button" onclick="testChapter(3)">测试第3章</button>
+        <button class="test-button" onclick="testChapter(4)">测试第4章</button>
+        <button class="test-button" onclick="testChapter(5)">测试第5章</button>
+        <button class="test-button" onclick="testChapter(6)">测试第6章</button>
+        <button class="test-button" onclick="showAllChapters()">显示所有章节</button>
+    </div>
+    
+    <div id="info-display"></div>
+    
+    <script>
+        function testChapter(chapterNum) {
+            const newUrl = `${window.location.origin}${window.location.pathname}?chapter=${chapterNum}`;
+            window.location.href = newUrl;
+        }
+        
+        function showAllChapters() {
+            if (window.battleSystem && window.battleSystem.getAllChaptersInfo) {
+                const chapters = window.battleSystem.getAllChaptersInfo();
+                const display = document.getElementById('info-display');
+                display.innerHTML = '<h3>所有章节信息:</h3>' + 
+                    chapters.map(ch => `
+                        <div class="chapter-info">
+                            <strong>第${ch.chapterNumber}章: ${ch.chapterName}</strong><br>
+                            描述: ${ch.description}<br>
+                            求生者数量: ${ch.survivorCount}<br>
+                            监管者数量: ${ch.hunterCount}
+                        </div>
+                    `).join('');
+            } else {
+                document.getElementById('info-display').innerHTML = 
+                    '<p style="color: red;">battleSystem 接口未加载</p>';
+            }
+        }
+        
+        // 页面加载后显示当前章节信息
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (window.battleSystem && window.battleSystem.getCurrentChapterInfo) {
+                    const current = window.battleSystem.getCurrentChapterInfo();
+                    const display = document.getElementById('info-display');
+                    display.innerHTML = `
+                        <div class="chapter-info">
+                            <h3>当前章节信息:</h3>
+                            <strong>第${current.chapterNumber}章: ${current.chapterName}</strong><br>
+                            描述: ${current.description}<br>
+                            可选求生者: ${current.availableSurvivors.join(', ')}<br>
+                            可选监管者: ${current.availableHunters.join(', ')}
+                        </div>
+                    `;
+                    console.log('当前章节信息:', current);
+                }
+            }, 1000);
+        });
+    </script>
+    
+    <!-- 加载战斗系统 -->
+    <script src="./dist/main.js" type="module"></script>
+</body>
+</html>

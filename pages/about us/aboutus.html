@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>关于我们</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'SimSun', 'NSimSun', 'PMingLiU', serif;
+            background: rgba(13,11,20,0.9) url('images/background.jpg') center/cover fixed;
+            color: #e8e6e3;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ---------- 整体下移---------- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 60px; /* 整个区域向下移动 */
+        }
+
+        header { text-align: center; margin-bottom: 30px; }
+        h1 {
+            font-size: 3rem;
+            color: #7a1022;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        /* 主页面：两行三列的网格布局 */
+        .team-section {
+            background: rgba(28,22,46,0.8);
+            border-radius: 8px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-items: center;
+            margin-top: 40px; /* ← 紫色背景 */
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .member-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 1.2rem;
+            color: #968ab4;        /* ← 恢复原始名字颜色 */
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            text-decoration: none; 
+        }
+        .member-name:hover { color: #858ae6; }
+
+        .member-desc { font-size: 0.95rem; color: #aca990; }
+
+        /* 详情页（保持原样排版） */
+        #detail-page {
+            display: none;
+            background: rgba(28,22,46,0.95);
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .detail-container { display: flex; gap: 30px; }
+        .detail-content { flex: 1; }
+        .detail-title { font-size: 1.8rem; color: #a58fab; margin-bottom: 15px; }
+        .detail-text { font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+        .contact-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #a73737;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .detail-image { flex: 1; max-width: 350px; border-radius: 8px; overflow: hidden; }
+        .detail-image img { width: 100%; height: 100%; object-fit: cover; }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: #4a3568;
+            color: #e8e6e3;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-button:hover { background: #5d2f8c; }
+
+        /* 底部返回主界面按钮容器 */
+        #main-return-btn-wrap { text-align:center; margin-top:20px; }
+
+        @media (max-width: 768px) {
+            .team-section { grid-template-columns: 1fr 1fr; }
+            h1 { font-size: 2.5rem; }
+        }
+        @media (max-width: 480px) {
+            .team-section { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="home-page">
+            <header><h1>关于我们</h1></header>
+
+            <div class="team-section">
+                <!-- 成员列表由 script.js 动态生成 -->
+            </div>
+
+            <!-- 页面上始终可见的返回主界面（保持原始 href 不变） -->
+            <div id="main-return-btn-wrap">
+                <a href="../../main.html" id="main-return-btn" class="back-button">返回主界面</a>
+            </div>
+        </div>
+
+        <!-- 详情页（与原来一致：在详情页里有“返回主页”按钮，点击应回到 aboutus 首页） -->
+        <div id="detail-page">
+            <div class="detail-container">
+                <div class="detail-content">
+                    <h2 class="detail-title">成员详情</h2>
+                    <div class="detail-text">
+                        <p>这里是成员的详细介绍内容。点击主页中的成员名字后，将会显示该成员的详细信息、背景故事和专业特长。</p>
+                    </div>
+                    <a href="#" class="contact-link">联系我们</a>
+
+                    <!-- 详细页内的返回按钮（脚本将绑定到这个按钮来返回 aboutus 页面） -->
+                    <a href="#" class="back-button">返回主页</a>
+                </div>
+
+                <div class="detail-image">
+                    <img src="images/detail.jpg" alt="详情图片"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本：保留外部 script.js 引入（功能逻辑放在 script.js） -->
+    <script src="script.js"></script>
+
+    <!-- 以下脚本与原先逻辑一致：通过监视 detail-page 的 style 属性来控制 main-return-btn 的显示/隐藏 -->
+    <script>
+    // 控制返回主界面按钮的显示/隐藏（保留原来判断逻辑）
+    document.addEventListener('DOMContentLoaded', function() {
+        var mainReturnBtn = document.getElementById('main-return-btn');
+        var detailPage = document.getElementById('detail-page');
+        function updateMainReturnBtn() {
+            if (detailPage && detailPage.style.display === 'block') {
+                mainReturnBtn.style.display = 'none';
+            } else {
+                mainReturnBtn.style.display = 'inline-block';
+            }
+        }
+        // 初始状态
+        updateMainReturnBtn();
+        // 监听 detailPage style 属性变化（原脚本逻辑）
+        var observer = new MutationObserver(updateMainReturnBtn);
+        if (detailPage) {
+            observer.observe(detailPage, { attributes: true, attributeFilter: ['style'] });
+        }
+    });
+    </script>
+</body>
+</html>
